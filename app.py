@@ -12,7 +12,7 @@ from product import new_plan, ZONES
 from storage import EventStore
 
 load_dotenv(Path(__file__).with_name('.env'))
-st.set_page_config(page_title='CrewSync AI', page_icon='🎼', layout='wide')
+st.set_page_config(page_title='CrewSync AI', page_icon='👥', layout='wide')
 apply_pending()
 
 with st.sidebar:
