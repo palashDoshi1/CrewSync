@@ -9,7 +9,7 @@ Built for student clubs, THON committees, and volunteer coordinators organizing 
 
 [![CrewSync video preview — click to open the MP4](media/demo-poster.png)](media/crewsync-demo.mp4)
 
-*The video is an animated explainer using fictional data, not a recording of a verified live API session. It includes simple English narration and captions.*
+*The video is a reconstructed walkthrough of the fictional Chicago football test: the full 12-person roster, prompt entry, three covered shifts, cancellation recovery, drafts, saving, hard checks, and a Mumbai example. It includes simple English narration and captions. The owner confirmed a successful live Luminal run; this video is not a continuous recording of that run.*
 
 ## The problem
 

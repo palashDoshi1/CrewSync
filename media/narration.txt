@@ -1,23 +1,23 @@
 00–10 seconds
-Meet CrewSync AI
-CrewSync helps student clubs and volunteer organizers bring people together. It keeps event plans, shifts, tasks, and communication in one workspace.
+Chicago football: meet the crew
+Here is a fictional Chicago football event. Twelve volunteers have different available hours. Each person can take one shift. CrewSync keeps these limits.
 
 10–20 seconds
-Start with your people
-First, add your volunteers and the hours they can help. Then enter the tasks, shift times, and number of people needed.
+Describe it in plain English
+Enter the Chicago event request and choose Luminal live AI. The model suggests an editable plan. Python schedules your existing volunteers after approval.
 
 20–30 seconds
-Describe the event
-With Luminal connected, describe your event in simple English. The AI suggests shifts, a checklist, and an announcement. Review everything before approving.
+Review the plan. Approve the schedule.
+Review the date, location, and three shifts. Approve the plan. Each shift has three people, giving nine assignments, three spares, and zero conflicts.
 
 30–40 seconds
-Build a clear schedule
-CrewSync assigns available volunteers and checks coverage, overlapping shifts, and workload limits. This fictional football event needs nine assignments across three shifts.
+When two volunteers cancel
+Cancel one assigned check-in volunteer: the spare fills in. Cancel another: coverage drops to two, and CrewSync flags one missing person.
 
 40–50 seconds
-Handle last-minute changes
-If someone cancels, preview a new schedule before applying it. CrewSync can use an available replacement and clearly shows any staffing gap.
+Draft reminders. Keep track. Save.
+Prepare a clear reminder, assign checklist tasks, and save your event. Review messages before sharing. If someone cancels, their checklist responsibility becomes unassigned.
 
 50–60 seconds
-Keep the crew in sync
-Draft reminders, track completed tasks, and save your event to reopen later. You stay in control. CrewSync: you lead, we coordinate.
+Test harder. Try another city.
+Extra staffing needs and partial availability reveal gaps. Overlapping shifts trigger warnings. Repeat in Mumbai with its local time zone. You lead, we coordinate.
