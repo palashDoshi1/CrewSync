@@ -51,3 +51,14 @@ class EventStore:
         else:
             result=[json.loads(p.read_text(encoding='utf-8')) for p in self.directory.glob('*.json')]
         return sorted(result,key=lambda p:(p['date'],p['event']))
+
+
+class SessionEventStore:
+    """Hosted demo records stay inside one visitor's Streamlit session."""
+    def __init__(self, records):
+        self.records=records
+    def save(self, plan):
+        fields=['id','event','date','location','volunteers','shifts','assignments','tasks','announcement']
+        self.records[plan['id']]={k:deepcopy(plan[k]) for k in fields if k in plan}
+    def list(self):
+        return sorted(deepcopy(list(self.records.values())),key=lambda p:(p['date'],p['event']))

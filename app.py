@@ -9,11 +9,12 @@ from ui import apply_theme, hero, shift_cards
 from setup_ui import sample_tables, read_tables
 from workspace import library, event_creator, setup_tables, task_manager, recovery, clear_outputs, apply_pending
 from product import new_plan, ZONES
-from storage import EventStore
+from storage import EventStore, SessionEventStore
 
 load_dotenv(Path(__file__).with_name('.env'))
 st.set_page_config(page_title='CrewSync AI', page_icon='👥', layout='wide')
 apply_pending()
+public_demo = os.getenv("CREWSYNC_PUBLIC_DEMO", "").lower() == "true"
 
 with st.sidebar:
     st.title('CrewSync AI')
@@ -24,21 +25,31 @@ with st.sidebar:
     st.header('AI connection')
     mode = st.radio('Message drafting', ['Demo · local templates', 'Luminal · live AI'])
     with st.expander('Private AI settings · collapse for recording', expanded=False):
-        key = st.text_input('API key', value=os.getenv('LUMINAL_API_KEY', ''), type='password')
+        key = st.text_input('API key', value='' if public_demo else os.getenv('LUMINAL_API_KEY', ''), type='password')
         base = st.text_input('API base URL', value=os.getenv('LUMINAL_BASE_URL') or LUMINAL_BASE_URL, help='Copy the documented OpenAI-compatible base URL. Include any version path required by Luminal.')
         model = st.text_input('Model ID', value=os.getenv('LUMINAL_MODEL') or LUMINAL_MODEL)
     st.caption('Live drafting sends the event, volunteer names and assigned shifts to your configured provider. No messages are sent to volunteers.')
     st.info('Scheduling and conflict checks work without an API key.')
     st.divider()
     with st.expander('Database connection'):
-        uri = st.text_input('MongoDB connection URI',value=os.getenv('MONGODB_URI',''),type='password',help='Enter your Atlas URI here or in the local .env file. It includes your database password.')
+        uri = st.text_input('MongoDB connection URI',value='' if public_demo else os.getenv('MONGODB_URI',''),type='password',help='Enter your Atlas URI here or in the local .env file. It includes your database password.')
     backend = st.radio('Event storage', ['Local library', 'MongoDB Atlas'], help='Atlas requires MONGODB_URI in the local .env file.')
     if backend == 'MongoDB Atlas' and not uri:
         st.warning('Add MONGODB_URI to .env and restart. Local storage is active until then.')
-    store = EventStore(uri=uri if backend == 'MongoDB Atlas' else '', database=os.getenv('MONGODB_DATABASE','crewsync'),directory=os.getenv('CREWSYNC_DATA_DIR') or None)
+    if public_demo:
+        st.session_state.setdefault('private_demo_events',{})
+        store = SessionEventStore(st.session_state.private_demo_events)
+        st.caption('Hosted demo: saved events belong to this browser session. MongoDB is not used.')
+    else:
+        store = EventStore(uri=uri if backend == 'MongoDB Atlas' else '', database=os.getenv('MONGODB_DATABASE','crewsync'),directory=os.getenv('CREWSYNC_DATA_DIR') or None)
 
 apply_theme(theme, motion)
 hero()
+with st.expander('Watch the one-minute CrewSync overview'):
+    video_path=Path(__file__).parent/'media'/'crewsync-demo.mp4'
+    if video_path.exists():
+        st.video(str(video_path))
+        st.caption('Narrated animated explainer using fictional data. MongoDB is optional and not used in this demo.')
 library(store)
 event_creator(key,base,model,mode)
 st.subheader('Bring your event together')

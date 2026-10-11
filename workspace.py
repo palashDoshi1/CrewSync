@@ -44,7 +44,8 @@ def setup_tables():
 
 def library(store):
     with st.expander('Your event dashboard · save, reopen, and track progress',expanded=True):
-        st.caption('Local library stays on this computer. MongoDB stores approved event snapshots in your configured database. Click Save to persist changes.')
+        from storage import SessionEventStore
+        st.caption('Hosted demo: Save and reopen events within this browser session. Records are separated between visitors and disappear when the session ends.' if isinstance(store,SessionEventStore) else 'Local library stays on this computer. MongoDB is optional. Click Save to persist changes.')
         if st.button('Save current event',disabled='plan' not in st.session_state):
             try:
                 store.save(st.session_state.plan)

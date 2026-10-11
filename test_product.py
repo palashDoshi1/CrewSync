@@ -3,7 +3,7 @@ import unittest
 from datetime import date
 from copy import deepcopy
 from product import *
-from storage import EventStore
+from storage import EventStore,SessionEventStore
 from coordinator import VOLUNTEERS,SHIFTS,parse_csv
 
 class ProductTests(unittest.TestCase):
@@ -51,3 +51,14 @@ class ProductTests(unittest.TestCase):
             store=EventStore(directory=d)
             self.p['id']='../outside'
             with self.assertRaises(ValueError):store.save(self.p)
+
+
+class HostedIsolation(unittest.TestCase):
+    def test_session_libraries_are_separate_and_copy_values(self):
+        first=SessionEventStore({});second=SessionEventStore({})
+        p=new_plan('Demo','2026-10-16','Stadium',parse_csv(VOLUNTEERS,'volunteers'),parse_csv(SHIFTS,'shifts'))
+        first.save(p)
+        self.assertEqual(len(first.list()),1)
+        self.assertEqual(second.list(),[])
+        p['event']='Unsaved change'
+        self.assertEqual(first.list()[0]['event'],'Demo')
