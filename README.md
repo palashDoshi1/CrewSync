@@ -41,9 +41,9 @@ LUMINAL_BASE_URL=
 LUMINAL_MODEL=
 ```
 
-Obtain the **documented OpenAI-compatible API base URL** and exact **chat model ID** from Luminal. Include the version path if required; do not enter the full `/chat/completions` endpoint because the SDK appends it. No provider URL or model ID is assumed. HTTPS is required. You can also enter the values in the sidebar. Select **Luminal · live AI** before generating a plan or drafts.
+Obtain the **documented OpenAI-compatible API base URL** and exact **chat model ID** from Luminal. Include the version path if required; do not enter the full `/chat/completions` endpoint because the SDK appends it. The sidebar now pre-fills the non-secret base URL and model confirmed in the user-supplied Luminal dashboard: `https://flash.luminal.cloud/v1` and `deepseek-ai/DeepSeek-V4.1-Flash`. They remain editable. HTTPS is required. You can also enter the values in the sidebar. Select **Luminal · live AI** before generating a plan or drafts.
 
-Each click may consume credits. Requests time out after 25 seconds, and automatic retries are disabled. Live planning sends your event description and last-created volunteer roster (or the sample roster if none exists). Other live actions send relevant event details, shifts, names, assigned work and validated issues. Keys are never saved in event documents. Keep `.env` private.
+Each click may consume credits. Requests time out after 25 seconds, and automatic retries are disabled. Live planning sends your event description and last-created volunteer roster (or the sample roster if none exists). Other live actions send relevant event details, shifts, names, assigned work and validated issues. Keys are never saved in event documents. Keep `.env` private. `.env` and `.env.*` are ignored by Git, except the key-free `.env.example`. Collapse Private AI settings during recordings.
 
 Live responses are not trusted as scheduling facts: event-plan JSON is validated, and the coordinator approves it. Message and briefing accuracy still needs human review. A provider may return malformed JSON; the app rejects it and retains your existing event.
 
@@ -107,4 +107,4 @@ Tests cover scheduling, invalid inputs, proposal validation, unknown AI task own
 - `ai_client.py`: configured chat API calls.
 - `ui.py`: visual themes, motion and shift cards.
 
-See `DEMO.md` for a 90-second script and sponsor checklist. API references: [Streamlit](https://docs.streamlit.io/develop/api-reference), [official OpenAI Python client](https://github.com/openai/openai-python), [PyMongo](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/).
+See `TESTING.md` for Chicago/Mumbai scenario inputs, expected results and live checks. See `DEMO.md` for a 90-second script and sponsor checklist. API references: [Streamlit](https://docs.streamlit.io/develop/api-reference), [official OpenAI Python client](https://github.com/openai/openai-python), [PyMongo](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/).

@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 from coordinator import VOLUNTEERS, SHIFTS, parse_csv, schedule, validate, display_rows, as_csv, template_messages
-from ai_client import draft_messages
+from ai_client import draft_messages, LUMINAL_BASE_URL, LUMINAL_MODEL, safe_error
 from ui import apply_theme, hero, shift_cards
 from setup_ui import sample_tables, read_tables
 from workspace import library, event_creator, setup_tables, task_manager, recovery, clear_outputs, apply_pending
@@ -23,9 +23,10 @@ with st.sidebar:
     st.divider()
     st.header('AI connection')
     mode = st.radio('Message drafting', ['Demo · local templates', 'Luminal · live AI'])
-    key = st.text_input('API key', value=os.getenv('LUMINAL_API_KEY', ''), type='password')
-    base = st.text_input('API base URL', value=os.getenv('LUMINAL_BASE_URL', ''), help='Copy the documented OpenAI-compatible base URL. Include any version path required by Luminal.')
-    model = st.text_input('Model ID', value=os.getenv('LUMINAL_MODEL', ''))
+    with st.expander('Private AI settings · collapse for recording', expanded=False):
+        key = st.text_input('API key', value=os.getenv('LUMINAL_API_KEY', ''), type='password')
+        base = st.text_input('API base URL', value=os.getenv('LUMINAL_BASE_URL') or LUMINAL_BASE_URL, help='Copy the documented OpenAI-compatible base URL. Include any version path required by Luminal.')
+        model = st.text_input('Model ID', value=os.getenv('LUMINAL_MODEL') or LUMINAL_MODEL)
     st.caption('Live drafting sends the event, volunteer names and assigned shifts to your configured provider. No messages are sent to volunteers.')
     st.info('Scheduling and conflict checks work without an API key.')
     st.divider()
@@ -151,7 +152,7 @@ if 'plan' in st.session_state:
                     st.session_state.briefing = draft_messages(key, base, model, context, purpose='briefing', tone=tone)
                 st.session_state.briefing_source = f'Live AI · {model}'
             except Exception as exc:
-                st.error(f'Briefing failed ({type(exc).__name__}). Check your AI connection or use Demo mode.')
+                st.error(safe_error(exc))
     if 'briefing' in st.session_state:
         st.caption(st.session_state.briefing_source + ' · review AI suggestions before acting')
         st.markdown(st.session_state.briefing)
@@ -172,7 +173,7 @@ if 'plan' in st.session_state:
             except Exception as exc:
                 # Do not show raw provider errors, URLs or keys in the UI.
                 kind = type(exc).__name__
-                st.error(f'Live drafting failed ({kind}). Check the API base URL, chat model, key and credits. Your schedule is retained. Switch to Demo to draft locally.')
+                st.error(safe_error(exc))
     if 'draft' in st.session_state:
         st.caption(st.session_state.draft_source + ' · review names and times before sharing')
         edited = st.text_area('Draft text', st.session_state.draft, height=260, key='draft_editor_' + str(st.session_state.draft))

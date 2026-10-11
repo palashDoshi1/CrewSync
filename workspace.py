@@ -8,7 +8,7 @@ import streamlit as st
 from product import ZONES, demo_proposal, validate_proposal, new_plan, cancellation_proposal, recovery_candidates
 from coordinator import validate, display_rows, template_messages
 from setup_ui import sample_tables
-from ai_client import create_event, draft_messages
+from ai_client import create_event, draft_messages, safe_error
 
 
 def clear_outputs():
@@ -102,7 +102,7 @@ def event_creator(key,base,model,mode):
                     source=f'Live AI · {model}'
                 st.session_state.event_proposal=dict(proposal=proposal,volunteers=deepcopy(vs),source=source)
             except Exception as exc:
-                st.error(f'Could not create a valid plan ({type(exc).__name__}). Check the AI settings and try again. Your event is unchanged.')
+                st.error(safe_error(exc))
         if 'event_proposal' in st.session_state:
             pending=st.session_state.event_proposal
             st.caption(pending['source'])
@@ -197,7 +197,7 @@ def recovery(p,key,base,model,mode):
                     with st.spinner('Drafting targeted requests…'):
                         st.session_state.outreach='Live AI · '+model+'\n\n'+draft_messages(key,base,model,dict(event=p['event'],date=p['date'],location=p['location'],validated_issues=issues,candidates=candidates),purpose='outreach')
                 except Exception as exc:
-                    st.error(f'Outreach failed ({type(exc).__name__}).')
+                    st.error(safe_error(exc))
         if 'outreach' in st.session_state:
             st.text(st.session_state.outreach)
             st.caption('Candidates are individual suggestions, not simultaneous assignments. Review requests and wait for volunteer confirmation.')

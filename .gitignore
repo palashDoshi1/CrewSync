@@ -5,3 +5,5 @@ __pycache__/
 .data/
 *.tmp
 .DS_Store
+.env.*
+!.env.example

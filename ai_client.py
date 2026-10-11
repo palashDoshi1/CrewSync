@@ -1,14 +1,33 @@
-"""Explicit OpenAI-compatible configuration; no provider URL/model defaults."""
+"""Explicit OpenAI-compatible configuration; Luminal defaults confirmed by the user’s dashboard."""
 import json
 from urllib.parse import urlparse
 
-def draft_messages(api_key, base_url, model, context, purpose="reminders", tone="Warm and concise"):
-    from openai import OpenAI
-    if not all(x.strip() for x in (api_key, base_url, model)):
-        raise ValueError('Enter the API key, documented API base URL, and exact model ID.')
+# Confirmed in the user-supplied Luminal dashboard; these are not secrets.
+LUMINAL_BASE_URL = 'https://flash.luminal.cloud/v1'
+LUMINAL_MODEL = 'deepseek-ai/DeepSeek-V4.1-Flash'
+
+class ConfigurationError(ValueError):
+    pass
+
+def validate_configuration(api_key, base_url, model):
+    if not api_key.strip():
+        raise ConfigurationError('Add your Luminal API key in the sidebar or local .env file.')
     url = urlparse(base_url.strip())
     if url.scheme != 'https' or not url.netloc or url.query or url.fragment or url.username:
-        raise ValueError('Use the HTTPS API base URL from Luminal documentation, without a query or credentials.')
+        raise ConfigurationError('API base URL must be an HTTPS address, not your project or key name.')
+    if url.path.rstrip('/').endswith('/chat/completions'):
+        raise ConfigurationError('Enter the base URL without /chat/completions; the app adds that path.')
+    if not model.strip():
+        raise ConfigurationError('Enter the exact model ID listed by Luminal.')
+
+def safe_error(exc):
+    if isinstance(exc, ConfigurationError):
+        return str(exc)
+    return f'Request failed ({type(exc).__name__}). Check the model, key, credits and connection. Your existing event is retained.'
+
+def draft_messages(api_key, base_url, model, context, purpose="reminders", tone="Warm and concise"):
+    from openai import OpenAI
+    validate_configuration(api_key, base_url, model)
     client = OpenAI(api_key=api_key.strip(), base_url=base_url.strip().rstrip('/') + '/', timeout=25, max_retries=0)
     prompts = {
         'event': 'Create a proposed one-day event from the user request. Return ONLY a JSON object with event (name), date (YYYY-MM-DD), location (meeting point), timezone (IANA name), shifts (array of objects: label, start HH:MM, end HH:MM, required integer 1-100), tasks (array of title, owner_id, deadline YYYY-MM-DD), and announcement (draft text). Use today for relative dates. Never invent volunteers; owner_id must match a supplied volunteer id or be an empty string. If logistics are missing, propose editable defaults, without claiming those details are confirmed. No overlapping overnight shifts; 1-30 shifts, up to 40 tasks. Do not return assignments: Python computes them after approval.',
