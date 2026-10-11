@@ -67,14 +67,14 @@ def library(store):
             if st.button('Open selected event'):
                 seed_plan(events[selected])
                 st.rerun()
-        else:
-            st.info('Create your first event below, then Save current event to keep it here.')
             if st.button('Use this roster for a new event'):
                 from coordinator import parse_csv, SHIFTS
                 selected_roster=deepcopy(events[selected]['volunteers'])
                 p=new_plan('New volunteer event',date.today(),'Meeting point · America/New_York',selected_roster,parse_csv(SHIFTS,'shifts'))
                 seed_plan(p)
                 st.rerun()
+        else:
+            st.info('Create your first event below, then Save current event to keep it here.')
         if st.button('Start a new sample event'):
             from setup_ui import read_tables
             vs,ss=read_tables(*sample_tables())
