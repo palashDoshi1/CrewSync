@@ -110,7 +110,7 @@ def event_creator(key,base,model,mode):
             st.write(f"**{proposal['event']}** · {proposal['date']} · {proposal['location']}")
             st.dataframe(proposal['shifts'],hide_index=True,width='stretch')
             st.write('Suggested checklist: '+ '; '.join(t['title'] for t in proposal['tasks']))
-            st.text(proposal['announcement'])
+            st.markdown(proposal['announcement'])
             with st.expander('Advanced · edit the proposal JSON'):
                 edited=st.text_area('Editable proposal',json.dumps(proposal,indent=2),height=220,key='proposal_json')
             approved=st.checkbox('I have reviewed the date, place, shifts and suggested tasks.',key='proposal_approved')
@@ -199,6 +199,7 @@ def recovery(p,key,base,model,mode):
                 except Exception as exc:
                     st.error(safe_error(exc))
         if 'outreach' in st.session_state:
-            st.text(st.session_state.outreach)
+            with st.container(border=True):
+                st.markdown(st.session_state.outreach)
             st.caption('Candidates are individual suggestions, not simultaneous assignments. Review requests and wait for volunteer confirmation.')
             st.download_button('Download help requests',st.session_state.outreach,'crewsync-help-requests.txt','text/plain')

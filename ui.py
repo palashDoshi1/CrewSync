@@ -17,6 +17,9 @@ def apply_theme(theme, motion):
     [data-testid="stSidebar"] {background:PANEL;border-right:1px solid LINE;}
     [data-testid="stSidebar"] *, [data-testid="stWidgetLabel"] *, [data-testid="stCaptionContainer"] {color:TEXT;}
     .stApp h1,.stApp h2,.stApp h3,.stApp p,.stApp label {color:TEXT;}
+    [data-testid="stText"], [data-testid="stText"] pre {color:TEXT!important;line-height:1.65;}
+    [data-testid="stMarkdownContainer"], [data-testid="stMarkdownContainer"] li, [data-testid="stMarkdownContainer"] strong {color:TEXT;}
+    [data-testid="stVerticalBlockBorderWrapper"] > div {border-color:LINE;}
     .block-container {max-width:1240px;padding-top:2.5rem;padding-bottom:3rem;}
     [data-testid="stForm"] {background:PANEL;border:1px solid LINE;border-radius:22px;padding:24px;}
     [data-testid="stTextInput"] input,[data-testid="stTextArea"] textarea,[data-testid="stDateInput"] input {
