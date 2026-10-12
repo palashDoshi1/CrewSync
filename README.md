@@ -79,6 +79,9 @@ LUMINAL_MODEL=deepseek-ai/DeepSeek-V4.1-Flash
 
 ## Deployment
 
+**Render is supported without changing the app:** `render.yaml` configures a free Python web service, the Streamlit start command and isolated hosted demo sessions. Sign in at [Render](https://dashboard.render.com), create a Blueprint from `palashDoshi1/CrewSync`, review the free service, and deploy. No API key or MongoDB credential is committed. Render will assign the live URL after a successful deployment.
+
+
 Deploy the existing Python app on [Streamlit Community Cloud](https://share.streamlit.io):
 
 - Repository: `palashDoshi1/CrewSync`

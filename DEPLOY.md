@@ -1,3 +1,19 @@
+# Deploy on Render (recommended alternative)
+
+1. Sign in at https://dashboard.render.com using GitHub.
+2. Create a Blueprint and select `palashDoshi1/CrewSync`.
+3. Render reads `render.yaml`. Confirm the service uses the Free plan and deploy it.
+4. Wait for the service to report Live; open its returned URL.
+5. Test the sample schedule, cancellation preview, task checklist and video.
+
+No MongoDB setup is required. Demo mode needs no Luminal key. For your live AI demonstration, enter your key in the app's collapsed Private AI settings. Never place the key in the repository.
+
+Hosted event records remain in each visitor's current session. On a free host, the service may sleep when idle and take time to wake; open it before judging.
+
+Render documentation: https://render.com/docs/web-services
+
+---
+
 # Deploy CrewSync on Streamlit Community Cloud
 
 1. Open https://share.streamlit.io and sign in with the GitHub account that owns `palashDoshi1/CrewSync`.
